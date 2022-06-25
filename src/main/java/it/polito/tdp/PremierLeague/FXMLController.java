@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.PremierLeague.model.Model;
+import it.polito.tdp.PremierLeague.model.Team;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -35,7 +36,7 @@ public class FXMLController {
     private Button btnSimula; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbSquadra"
-    private ComboBox<?> cmbSquadra; // Value injected by FXMLLoader
+    private ComboBox<Team> cmbSquadra; // Value injected by FXMLLoader
 
     @FXML // fx:id="txtN"
     private TextField txtN; // Value injected by FXMLLoader
@@ -49,11 +50,30 @@ public class FXMLController {
     @FXML
     void doClassifica(ActionEvent event) {
 
+    	Team s= cmbSquadra.getValue();
+    	txtResult.appendText("SQUADRE PEGGIORI"+ "\n");
+    	for (Team t: model.getPeggiori(s)) {
+    		t.setPunti(this.model.totPuntiSquadra(t, s));
+    		txtResult.appendText(t+ " "+t.getPunti()+"\n");
+    		
+    	}
+    	txtResult.appendText("SQUADRE MIGLIORI"+ "\n");
+    	for (Team t: model.getMigliori(s)) {
+    		t.setPunti(this.model.totPuntiSquadra(t, s));
+    		txtResult.appendText(t+" "+t.getPunti()+"\n");
+    	}
+    	
     }
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
+    	this.model.creaGrafo();
+    	txtResult.appendText("Grafo creato!\n");
+		txtResult.appendText("VERTICI: "+this.model.nVertici()+"\n");
+    	txtResult.appendText("ARCHI: "+this.model.nArchi()+"\n");
 
+    	cmbSquadra.getItems().clear();
+    	cmbSquadra.getItems().addAll(this.model.getSquadre());
     }
 
     @FXML
@@ -66,7 +86,7 @@ public class FXMLController {
         assert btnCreaGrafo != null : "fx:id=\"btnCreaGrafo\" was not injected: check your FXML file 'Scene.fxml'.";
         assert btnClassifica != null : "fx:id=\"btnClassifica\" was not injected: check your FXML file 'Scene.fxml'.";
         assert btnSimula != null : "fx:id=\"btnSimula\" was not injected: check your FXML file 'Scene.fxml'.";
-        assert cmbSquadra != null : "fx:id=\"cmbSquadra\" was not injected: check your FXML file 'Scene.fxml'.";
+     //   assert cmbSquadra != null : "fx:id=\"cmbSquadra\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtN != null : "fx:id=\"txtN\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtX != null : "fx:id=\"txtX\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtResult != null : "fx:id=\"txtResult\" was not injected: check your FXML file 'Scene.fxml'.";
